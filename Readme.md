@@ -12,11 +12,11 @@ Refactor this code to the n-th degree, till you're happy or until time runs out 
 2. refactor
 3. Let us know when you're done
  
- ###The deadline for this task is 2020-10-09 18:00
+ ### The deadline for this task is 2020-10-09 18:00
 
 # Tips
 1. It's easy to test when using a simple deterministic pattern.
 2. Martin Fowler wrote a book about refactoring.
 3. It can help if only one person codes at any time see: Pair-Programming.
 
-#Enjoy. Good luck. May the best squad win.!
+# Enjoy. Good luck. May the best squad win.!
