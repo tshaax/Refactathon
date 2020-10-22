@@ -1,7 +1,7 @@
 # Introduction
 This project contains a raw implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
-* C# The code only has the program.cs file with a single function.
-* JavaScript The code only has a single gameoflife.html file with a function called runConway().
+* C# - The code only has the program.cs file with a single function.
+* JavaScript - The code only has a single gameoflife.html file with a function called runConway().
 No forethought has gone into the design or structure of the code.
 
 # Your Mission
