@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<script>
+    async function runConway() {
+        //CODE GOES HERE
+    };
+</script>
+
+<head>
+    <title>Conway's Game of Life</title>
+</head>
+
+<body>
+    <h1>Conway's Game of Life</H1>
+    <div>
+        <label for="width">Width: </label><br /><input id="width" name="width" type="number" /><br />
+        <label for="height">Height: </label><br /><input id="height" name="height" type="number" /><br />
+        <label for="generations">Generations: </label><br /><input id="generations" name="generations"
+            type="number" /><br />
+        <input type="button" value="Generate" onclick="runConway()" />
+    </div>
+    <canvas id="boardCanvas">
+
+    </canvas>
+    <p id="output"></p>
+</body>
+
+</html>
