@@ -10,13 +10,15 @@ Refactor this code to the n-th degree, till you're happy or until time runs out 
 ## Instructions
 1. clone the master branch.
 2. refactor
-3. Let us know when you're done
- 
- ### The deadline for this task is 2020-10-09 18:00
+3. You can email your solution or add it to a source control repository and send the link.
+4. Let me know when you're done @ hendrikj@osiristrading.com
+
+ ### Your code *HAS* to be submitted by 2020-10-23 @ 14:00 for it to be eligible for a prize.
 
 # Tips
 1. It's easy to test when using a simple deterministic pattern.
 2. Martin Fowler wrote a book about refactoring.
 3. It can help if only one person codes at any time see: Pair-Programming.
+4. Use any IDE that you are comfortable with.
 
 # Enjoy. Good luck. May the best squad win.!
