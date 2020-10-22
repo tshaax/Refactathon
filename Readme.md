@@ -1,17 +1,16 @@
 # Introduction
 This project contains a raw implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
-The code only has the program.cs file with a single function.
+* C# The code only has the program.cs file with a single function.
+* JavaScript The code only has a single gameoflife.html file with a function called runConway().
 No forethought has gone into the design or structure of the code.
 
 # Your Mission
-If you choose to accept, refactor this code to the n-th degree, till you're happy or until time runs out.
+Refactor this code to the n-th degree, till you're happy or until time runs out (2020-10-23 @ 14:00).
 
 ## Instructions
 1. clone the master branch.
-2. create a new branch for your squad (you won't be able to edit the master branch).
-3. refactor
-4. Let us know when you're done
-5. The repository will be locked after the deadline is reached, so check in regularly
+2. refactor
+3. Let us know when you're done
  
  ###The deadline for this task is 2020-10-09 18:00
 
