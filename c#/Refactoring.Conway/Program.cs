@@ -110,7 +110,7 @@ namespace Refactoring.Conway
                                         continue;
                                     }
 
-                                    if (yScan >= 0 && yScan < width && board[xScan, yScan])
+                                    if (yScan >= 0 && yScan < height && board[xScan, yScan])
                                     {
                                         livingNeighbourCount += 1;
                                     }
