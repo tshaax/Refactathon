@@ -2,6 +2,7 @@
 This project contains a raw implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
 * C# - The code only has the program.cs file with a single function.
 * JavaScript - The code only has a single gameoflife.html file with a function called runConway().
+
 No forethought has gone into the design or structure of the code.
 
 # Your Mission
@@ -9,6 +10,7 @@ Refactor this code to the n-th degree, till you're happy or until time runs out 
 
 ## Instructions
 1. clone the master branch.
+2. Choose which implementation you want to refactor(you don't need to refactor both languages).
 2. refactor
 3. You can email your solution or add it to a source control repository and send the link.
 4. Let me know when you're done @ hendrikj@osiristrading.com
