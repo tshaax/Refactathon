@@ -35,20 +35,18 @@ namespace Refactoring.Conway
                 }
                 while (!int.TryParse(inputHeight, out height));
 
-                bool[,] board = new bool[width, height];
-                int total = (width * height);
-                int ratio = (total * 4) / 10;
+                var board = new bool[width, height];
+                var total = width * height;
+                var ratio = total * 4 / 10;
 
-                for (int x = 0; x < width; x++)
+                for (var x = 0; x < width; x++)
                 {
-                    for (int y = 0; y < height; y++)
+                    for (var y = 0; y < height; y++)
                     {
                         board[x, y] = RandomNumberGenerator.GetInt32(0, total) < ratio;
                     }
                 }
-
-
-
+                
                 int generations;
                 string inputGenerations;
                 do
@@ -60,13 +58,13 @@ namespace Refactoring.Conway
                 int i;
                 for (i = 0; i <= generations && !CancellationTokenSource.IsCancellationRequested; i++)
                 {
-                    bool societyDied = true;
+                    var societyDied = true;
 
                     Clear();
                     WriteLine($"Generation: {i}");
-                    for (int x = 0; x < width; x++)
+                    for (var x = 0; x < width; x++)
                     {
-                        for (int y = 0; y < height; y++)
+                        for (var y = 0; y < height; y++)
                         {
                             if (board[x, y])
                             {
@@ -90,19 +88,19 @@ namespace Refactoring.Conway
                         break;
                     }
 
-                    bool[,] newBoard = new bool[width, height];
-                    for (int x = 0; x < width; x++)
+                    var newBoard = new bool[width, height];
+                    for (var x = 0; x < width; x++)
                     {
-                        for (int y = 0; y < height; y++)
+                        for (var y = 0; y < height; y++)
                         {
-                            int livingNeighbourCount = 0;
-                            for (int xScan = x - 1; xScan < x + 2; xScan++)
+                            var livingNeighbourCount = 0;
+                            for (var xScan = x - 1; xScan < x + 2; xScan++)
                             {
                                 if (xScan < 0 || xScan >= width)
                                 {
                                     continue;
                                 }
-                                for (int yScan = y - 1; yScan < y + 2; yScan++)
+                                for (var yScan = y - 1; yScan < y + 2; yScan++)
                                 {
                                     if (xScan == x && yScan == y)
                                     {
@@ -115,7 +113,7 @@ namespace Refactoring.Conway
                                     }
                                 }
                             }
-                            newBoard[x, y] = (board[x, y] && livingNeighbourCount == 2) || livingNeighbourCount == 3;
+                            newBoard[x, y] = board[x, y] && livingNeighbourCount == 2 || livingNeighbourCount == 3;
                         }
                     }
 
