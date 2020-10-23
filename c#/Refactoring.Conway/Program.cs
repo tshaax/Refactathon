@@ -15,7 +15,6 @@ namespace Refactoring.Conway
             {
                 args.Cancel = true;
                 cancellationTokenSource.Cancel();
-                cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }
             Console.CancelKeyPress += OnCancelKeyPress;
 
@@ -59,12 +58,13 @@ namespace Refactoring.Conway
                     inputGenerations = Console.ReadLine();
                 }
                 while (!int.TryParse(inputGenerations, out generations));
-
-                for (int i = 0; i <= generations && !cancellationTokenSource.IsCancellationRequested; i++)
+                int i;
+                for (i = 0; i <= generations && !cancellationTokenSource.IsCancellationRequested; i++)
                 {
-                    Console.WriteLine($"Generation: {0}");
-                    Console.Clear();
                     bool societyDied = true;
+
+                    Console.Clear();
+                    Console.WriteLine($"Generation: {i}");
                     for (int x = 0; x < width; x++)
                     {
                         for (int y = 0; y < height; y++)
@@ -123,7 +123,7 @@ namespace Refactoring.Conway
                     board = newBoard;
                     Thread.Sleep(TimeSpan.FromSeconds(value: 1));
                 }
-                Console.WriteLine($"Generation: {generations} - Output Completed! Press any key to exit.");
+                Console.WriteLine($"Generation: {i} - Output Completed! Press any key to exit.");
                 Console.ReadKey();
             }
             catch (OperationCanceledException)
