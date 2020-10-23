@@ -34,7 +34,7 @@ namespace Refactoring.Conway
                 string inputHeight;
                 do
                 {
-                    Console.WriteLine("What is the width of the board?");
+                    Console.WriteLine("What is the height of the board?");
                     inputHeight = Console.ReadLine();
                 }
                 while (!int.TryParse(inputHeight, out height));
@@ -55,7 +55,7 @@ namespace Refactoring.Conway
                 string inputGenerations;
                 do
                 {
-                    Console.WriteLine("What is the width of the board?");
+                    Console.WriteLine("How many generations does the board run for");
                     inputGenerations = Console.ReadLine();
                 }
                 while (!int.TryParse(inputGenerations, out generations));
