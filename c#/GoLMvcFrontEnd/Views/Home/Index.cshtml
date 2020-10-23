@@ -22,28 +22,3 @@
             });
     }
 </script>
-
-<div>
-    width: <input id="golWidth"/>
-    height: <input id="golHeight" />
-    generations: <input id="golGenerations" />
-    <button onclick="run()">Start</button>
-</div>
-<br/>
-<pre id="golDiv">
-
- 
-
-</pre>
-<script>
-    function run() {
-        let width = $('#golWidth').val();
-        let height = $('#golHeight').val();
-        let generations = $('#golGenerations').val();
-        $.post('Home/GetGameOfLife', { width: width, height: height, generations: generations}, 
-            function(returnedData){
-                console.log(returnedData);
-                $('#golDiv').html(returnedData);
-            });
-    }
-</script>
