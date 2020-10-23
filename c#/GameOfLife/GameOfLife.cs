@@ -51,6 +51,8 @@ namespace GameOfLife
                 {
                     for (var y = 0; y < _height; y++)
                     {
+
+
                         if (_board[x, y])
                         {
                             sb.Append("0");

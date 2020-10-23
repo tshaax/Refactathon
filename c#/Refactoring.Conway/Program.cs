@@ -49,7 +49,7 @@ namespace Refactoring.Conway
                 WriteLine(output);
                 inputDimension = ReadLine();
             }
-            while (!int.TryParse(inputDimension, out dimension));
+            while (!int.TryParse(inputDimension, out dimension) || dimension < 0);
 
             return dimension;
         }
