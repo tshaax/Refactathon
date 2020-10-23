@@ -7,16 +7,12 @@ namespace Refactoring.Conway
 {
     class Program
     {
-        //TODO: Refactor this
+        private static readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+
         static void Main(string[] args)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            void OnCancelKeyPress(object sender, ConsoleCancelEventArgs args)
-            {
-                args.Cancel = true;
-                cancellationTokenSource.Cancel();
-            }
+            
             CancelKeyPress += OnCancelKeyPress;
 
             try
@@ -41,7 +37,7 @@ namespace Refactoring.Conway
 
                 bool[,] board = new bool[width, height];
                 int total = (width * height);
-                int ratio = (total * 40) / 100;
+                int ratio = (total * 4) / 10;
 
                 for (int x = 0; x < width; x++)
                 {
@@ -50,6 +46,8 @@ namespace Refactoring.Conway
                         board[x, y] = RandomNumberGenerator.GetInt32(0, total) < ratio;
                     }
                 }
+
+
 
                 int generations;
                 string inputGenerations;
@@ -60,7 +58,7 @@ namespace Refactoring.Conway
                 }
                 while (!int.TryParse(inputGenerations, out generations));
                 int i;
-                for (i = 0; i <= generations && !cancellationTokenSource.IsCancellationRequested; i++)
+                for (i = 0; i <= generations && !CancellationTokenSource.IsCancellationRequested; i++)
                 {
                     bool societyDied = true;
 
@@ -132,6 +130,12 @@ namespace Refactoring.Conway
                 //DO NOTHING
             }
             CancelKeyPress -= OnCancelKeyPress;
+        }
+
+        private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs args)
+        {
+            args.Cancel = true;
+            CancellationTokenSource.Cancel();
         }
     }
 }
