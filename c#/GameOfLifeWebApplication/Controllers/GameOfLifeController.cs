@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace GameOfLifeWebApplication.Controllers
         {
             var gameOfLife = new GameOfLife.GameOfLife(width, height, generations);
             var result = gameOfLife.Run(token);
-            return new JsonResult(result);
+            return new JsonResult(result.ToList());
         }
     }
 }

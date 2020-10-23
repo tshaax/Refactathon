@@ -23,13 +23,17 @@ namespace Refactoring.Conway
                 var board = new GameOfLife.GameOfLife(width, height, generations);
 
                 var gensCompleted = 0;
-                foreach (var output in board.Run(CancellationTokenSource.Token))
+                var stringBoards = board.BoardsToString(board.Run(CancellationTokenSource.Token));
+                foreach (var output in stringBoards)
                 {
                     Clear();
+                    WriteLine($"Generation: {gensCompleted}");
                     WriteLine(output);
+                    Thread.Sleep(TimeSpan.FromSeconds(value: 1));
                     gensCompleted++;
                 }
-
+                if (gensCompleted <= generations)
+                    WriteLine("I guess that's the end of our little society.");
                 WriteLine($"Generation: {gensCompleted} - Output Completed! Press any key to exit.");
                 ReadKey();
             }
@@ -49,7 +53,7 @@ namespace Refactoring.Conway
                 WriteLine(output);
                 inputDimension = ReadLine();
             }
-            while (!int.TryParse(inputDimension, out dimension) || dimension < 0);
+            while (!int.TryParse(inputDimension, out dimension) || dimension <= 0);
 
             return dimension;
         }

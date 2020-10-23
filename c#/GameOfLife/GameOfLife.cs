@@ -12,7 +12,7 @@ namespace GameOfLife
         private int _width;
         private int _height;
         private int _generations;
-        private bool[,] _board;
+        private bool[][] _board;
         private readonly int _percentageBoardToStartAlive;
 
         public GameOfLife(int width, int height, int generations, int percentageToStartAlive = 40)
@@ -26,56 +26,26 @@ namespace GameOfLife
 
         private void GenerateBoard()
         {
-            _board = new bool[_width, _height];
+            _board = new bool[_width][];
             var total = _width * _height;
             var ratio = total * _percentageBoardToStartAlive / 100;
 
             for (var x = 0; x < _width; x++)
             {
-                for (var y = 0; y < _height; y++)
-                {
-                    _board[x, y] = RandomNumberGenerator.GetInt32(0, total) < ratio;
-                }
+                _board[x] = new bool[_height];
+                 for (var y = 0; y < _height; y++)
+                 {
+                     _board[x][y] = RandomNumberGenerator.GetInt32(0, total) < ratio;
+                 }
+                
             }
         }
 
-        public IEnumerable<string> Run(CancellationToken cancellationToken)
+        public IEnumerable<bool[][]> Run(CancellationToken cancellationToken)
         {
             for (var i = 0; i <= _generations && !cancellationToken.IsCancellationRequested; i++)
             {
-                var sb = new StringBuilder();
-                var societyDied = true;
-
-                sb.AppendLine($"Generation: {i}");
-                for (var x = 0; x < _width; x++)
-                {
-                    for (var y = 0; y < _height; y++)
-                    {
-
-
-                        if (_board[x, y])
-                        {
-                            sb.Append("0");
-                            societyDied = false;
-                        }
-                        else
-                        {
-                            sb.Append(".");
-                        }
-                        if (y == _board.GetLength(dimension: 1) - 1)
-                        {
-                            sb.AppendLine();
-                        }
-                    }
-                }
-
-                if (societyDied)
-                {
-                    sb.AppendLine("I guess that's the end of our little society.");
-                    break;
-                }
-
-                var newBoard = new bool[_width, _height];
+                var newBoard = new bool[_width][];
                 for (var x = 0; x < _width; x++)
                 {
                     for (var y = 0; y < _height; y++)
@@ -94,17 +64,58 @@ namespace GameOfLife
                                     continue;
                                 }
 
-                                if (yScan >= 0 && yScan < _width && _board[xScan, yScan])
+                                if (yScan >= 0 && yScan < _width && _board[xScan][yScan])
                                 {
                                     livingNeighbourCount += 1;
                                 }
                             }
                         }
-                        newBoard[x, y] = _board[x, y] && livingNeighbourCount == 2 || livingNeighbourCount == 3;
+
+                        newBoard[x] = new bool[_height];
+                        newBoard[x][y] = _board[x][y] && livingNeighbourCount == 2 || livingNeighbourCount == 3;
+                    }
+                }
+                yield return _board;
+                _board = newBoard;
+
+            }
+        }
+
+        public IEnumerable<string> BoardsToString(IEnumerable<bool[][]> boards)
+        {
+            foreach (var board in boards)
+            {
+                var sb = new StringBuilder();
+                var societyDied = true;
+
+                for (var x = 0; x < _width; x++)
+                {
+                    for (var y = 0; y < _height; y++)
+                    {
+
+
+                        if (board[x][y])
+                        {
+                            sb.Append("0");
+                            societyDied = false;
+                        }
+                        else
+                        {
+                            sb.Append(".");
+                        }
+                        if (y == _height - 1)
+                        {
+                            sb.AppendLine();
+                        }
                     }
                 }
 
-                _board = newBoard;
+                if (societyDied)
+                {
+                    sb.AppendLine("I guess that's the end of our little society.");
+                    break;
+                }
+
                 Thread.Sleep(TimeSpan.FromSeconds(value: 1));
                 yield return sb.ToString();
             }

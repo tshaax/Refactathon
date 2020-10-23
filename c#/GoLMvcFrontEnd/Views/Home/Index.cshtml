@@ -1,0 +1,19 @@
+﻿<div>
+    width: <input id="goldWidth"/>
+    height: <input id="goldWidth" />
+    generations: <input id="goldWidth" />
+    <button onclick="run()">Start</button>
+</div>
+<br/>
+<div id="golDiv">
+
+</div>
+<script>
+    function run() {
+        $.post('Home/GetGameOfLife1', { width: 10, height: 10, generations: 10}, 
+            function(returnedData){
+                console.log(returnedData);
+                $('#golDiv').html(returnedData);
+            });
+    }
+</script>
