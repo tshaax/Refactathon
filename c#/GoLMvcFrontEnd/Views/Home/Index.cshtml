@@ -17,8 +17,13 @@
         let generations = $('#golGenerations').val();
         $.post('Home/GetGameOfLife', { width: width, height: height, generations: generations}, 
             function(returnedData){
-                console.log(returnedData);
-                $('#golDiv').html(returnedData);
+                //console.log(returnedData);
+                var j = 0;
+                setInterval(function() {
+                    $('#golDiv').html(returnedData[j]);
+                    j++;
+                }, 1000);
+
             }); 
     }
 </script>
