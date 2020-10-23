@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Threading;
+using static System.Console;
 
 namespace Refactoring.Conway
 {
@@ -16,7 +17,7 @@ namespace Refactoring.Conway
                 args.Cancel = true;
                 cancellationTokenSource.Cancel();
             }
-            Console.CancelKeyPress += OnCancelKeyPress;
+            CancelKeyPress += OnCancelKeyPress;
 
             try
             {
@@ -24,8 +25,8 @@ namespace Refactoring.Conway
                 string inputWidth;
                 do
                 {
-                    Console.WriteLine("What is the width of the board?");
-                    inputWidth = Console.ReadLine();
+                    WriteLine("What is the width of the board?");
+                    inputWidth = ReadLine();
                 }
                 while (!int.TryParse(inputWidth, out width));
 
@@ -33,8 +34,8 @@ namespace Refactoring.Conway
                 string inputHeight;
                 do
                 {
-                    Console.WriteLine("What is the height of the board?");
-                    inputHeight = Console.ReadLine();
+                    WriteLine("What is the height of the board?");
+                    inputHeight = ReadLine();
                 }
                 while (!int.TryParse(inputHeight, out height));
 
@@ -54,8 +55,8 @@ namespace Refactoring.Conway
                 string inputGenerations;
                 do
                 {
-                    Console.WriteLine("How many generations does the board run for");
-                    inputGenerations = Console.ReadLine();
+                    WriteLine("How many generations does the board run for");
+                    inputGenerations = ReadLine();
                 }
                 while (!int.TryParse(inputGenerations, out generations));
                 int i;
@@ -63,31 +64,31 @@ namespace Refactoring.Conway
                 {
                     bool societyDied = true;
 
-                    Console.Clear();
-                    Console.WriteLine($"Generation: {i}");
+                    Clear();
+                    WriteLine($"Generation: {i}");
                     for (int x = 0; x < width; x++)
                     {
                         for (int y = 0; y < height; y++)
                         {
                             if (board[x, y])
                             {
-                                Console.Write("0");
+                                Write("0");
                                 societyDied = false;
                             }
                             else
                             {
-                                Console.Write(".");
+                                Write(".");
                             }
                             if (y == board.GetLength(dimension: 1) - 1)
                             {
-                                Console.WriteLine();
+                                WriteLine();
                             }
                         }
                     }
 
                     if(societyDied)
                     {
-                        Console.WriteLine("I guess that's the end of our little society.");
+                        WriteLine("I guess that's the end of our little society.");
                         break;
                     }
 
@@ -123,14 +124,14 @@ namespace Refactoring.Conway
                     board = newBoard;
                     Thread.Sleep(TimeSpan.FromSeconds(value: 1));
                 }
-                Console.WriteLine($"Generation: {i} - Output Completed! Press any key to exit.");
-                Console.ReadKey();
+                WriteLine($"Generation: {i} - Output Completed! Press any key to exit.");
+                ReadKey();
             }
             catch (OperationCanceledException)
             {
                 //DO NOTHING
             }
-            Console.CancelKeyPress -= OnCancelKeyPress;
+            CancelKeyPress -= OnCancelKeyPress;
         }
     }
 }
