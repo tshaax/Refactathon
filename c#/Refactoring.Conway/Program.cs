@@ -11,29 +11,12 @@ namespace Refactoring.Conway
 
         static void Main(string[] args)
         {
-
-            
             CancelKeyPress += OnCancelKeyPress;
 
             try
             {
-                int width;
-                string inputWidth;
-                do
-                {
-                    WriteLine("What is the width of the board?");
-                    inputWidth = ReadLine();
-                }
-                while (!int.TryParse(inputWidth, out width));
-
-                int height;
-                string inputHeight;
-                do
-                {
-                    WriteLine("What is the height of the board?");
-                    inputHeight = ReadLine();
-                }
-                while (!int.TryParse(inputHeight, out height));
+                var width = ReadInteger("What is the width of the board?");
+                var height = ReadInteger("What is the height of the board?");
 
                 var board = new bool[width, height];
                 var total = width * height;
@@ -46,15 +29,9 @@ namespace Refactoring.Conway
                         board[x, y] = RandomNumberGenerator.GetInt32(0, total) < ratio;
                     }
                 }
-                
-                int generations;
-                string inputGenerations;
-                do
-                {
-                    WriteLine("How many generations does the board run for");
-                    inputGenerations = ReadLine();
-                }
-                while (!int.TryParse(inputGenerations, out generations));
+
+
+                var generations = ReadInteger("How many generations does the board run for");
                 int i;
                 for (i = 0; i <= generations && !CancellationTokenSource.IsCancellationRequested; i++)
                 {
@@ -82,7 +59,7 @@ namespace Refactoring.Conway
                         }
                     }
 
-                    if(societyDied)
+                    if (societyDied)
                     {
                         WriteLine("I guess that's the end of our little society.");
                         break;
@@ -128,6 +105,20 @@ namespace Refactoring.Conway
                 //DO NOTHING
             }
             CancelKeyPress -= OnCancelKeyPress;
+        }
+
+        private static int ReadInteger(string output)
+        {
+            int dimension;
+            string inputDimension;
+            do
+            {
+                WriteLine(output);
+                inputDimension = ReadLine();
+            }
+            while (!int.TryParse(inputDimension, out dimension));
+
+            return dimension;
         }
 
         private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs args)
