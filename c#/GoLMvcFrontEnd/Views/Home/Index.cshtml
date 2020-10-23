@@ -1,16 +1,46 @@
 ﻿<div>
-    width: <input id="goldWidth"/>
-    height: <input id="goldWidth" />
-    generations: <input id="goldWidth" />
+    width: <input id="golWidth"/>
+    height: <input id="golHeight" />
+    generations: <input id="golGenerations" />
     <button onclick="run()">Start</button>
 </div>
 <br/>
-<div id="golDiv">
+<pre id="golDiv">
 
-</div>
+ 
+
+</pre>
 <script>
     function run() {
-        $.post('Home/GetGameOfLife1', { width: 10, height: 10, generations: 10}, 
+        let width = $('#golWidth').val();
+        let height = $('#golHeight').val();
+        let generations = $('#golGenerations').val();
+        $.post('Home/GetGameOfLife', { width: width, height: height, generations: generations}, 
+            function(returnedData){
+                console.log(returnedData);
+                $('#golDiv').html(returnedData);
+            });
+    }
+</script>
+
+<div>
+    width: <input id="golWidth"/>
+    height: <input id="golHeight" />
+    generations: <input id="golGenerations" />
+    <button onclick="run()">Start</button>
+</div>
+<br/>
+<pre id="golDiv">
+
+ 
+
+</pre>
+<script>
+    function run() {
+        let width = $('#golWidth').val();
+        let height = $('#golHeight').val();
+        let generations = $('#golGenerations').val();
+        $.post('Home/GetGameOfLife', { width: width, height: height, generations: generations}, 
             function(returnedData){
                 console.log(returnedData);
                 $('#golDiv').html(returnedData);

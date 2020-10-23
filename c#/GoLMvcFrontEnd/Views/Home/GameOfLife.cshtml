@@ -1,26 +1,19 @@
-﻿@model IEnumerable<string>
-
-<div>
-    width: <input/>
-    height: <input/>
-    generations: <input/>
-    <button>Start</button>
+﻿<div>
+    width: <input id="goldWidth" />
+    height: <input id="goldWidth" />
+    generations: <input id="goldWidth" />
+    <button onclick="run()">Start</button>
 </div>
-@*@foreach (var ok in Model)
-{
-    <div>@ok</div><div>test1</div>
-    <br/>
-}*@
+<br />
+<div id="golDiv">
+
+</div>
 <script>
     function run() {
-
-            //$.get("demo_test.asp", function(data, status){
-            //    alert("Data: " + data + "\nStatus: " + status);
-            //});
-
-        $.post('Home/GetGameOfLife1', { width: 10, height: 10, generations: 10}, 
-                function(returnedData){
-                    console.log(returnedData);
-                });
+        $.post('Home/GetGameOfLife1', { width: 10, height: 10, generations: 10 },
+            function (returnedData) {
+                console.log(returnedData);
+                $('#golDiv').html(returnedData);
+            });
     }
 </script>
