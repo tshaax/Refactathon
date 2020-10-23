@@ -1,136 +1,109 @@
 using System;
-using System.Security.Cryptography;
 using System.Threading;
+using Microsoft.Extensions.Configuration;
+using Refactoring.Conway.Common;
+using Refactoring.Conway.GameCore;
+using Refactoring.Conway.GameCore.Interfaces;
+using Refactoring.Conway.GameCore.UI.ConsoleUI;
+using Refactoring.Conway.GameCore.UI.UnityUI;
+using Refactoring.Conway.GameCore.WorldBuilder;
+using Serilog;
 
 namespace Refactoring.Conway
 {
     class Program
     {
-        //TODO: Refactor this
+        public static IConfigurationRoot Configuration { get; set; }
+        static readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+
         static void Main(string[] args)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-            void OnCancelKeyPress(object sender, ConsoleCancelEventArgs args)
-            {
-                args.Cancel = true;
-                cancellationTokenSource.Cancel();
-            }
+            BuildConfiguration(args);
+            BuildLogger();
+           
             Console.CancelKeyPress += OnCancelKeyPress;
-
             try
             {
-                int width;
-                string inputWidth;
-                do
+                var gameOfLife = SetupGameBoard(out var generations);
+                int currentGeneration;
+                for (currentGeneration = 0; currentGeneration <= generations && !CancellationTokenSource.IsCancellationRequested; currentGeneration++)
                 {
-                    Console.WriteLine("What is the width of the board?");
-                    inputWidth = Console.ReadLine();
-                }
-                while (!int.TryParse(inputWidth, out width));
-
-                int height;
-                string inputHeight;
-                do
-                {
-                    Console.WriteLine("What is the height of the board?");
-                    inputHeight = Console.ReadLine();
-                }
-                while (!int.TryParse(inputHeight, out height));
-
-                bool[,] board = new bool[width, height];
-                int total = (width * height);
-                int ratio = (total * 40) / 100;
-
-                for (int x = 0; x < width; x++)
-                {
-                    for (int y = 0; y < height; y++)
-                    {
-                        board[x, y] = RandomNumberGenerator.GetInt32(0, total) < ratio;
-                    }
-                }
-
-                int generations;
-                string inputGenerations;
-                do
-                {
-                    Console.WriteLine("How many generations does the board run for");
-                    inputGenerations = Console.ReadLine();
-                }
-                while (!int.TryParse(inputGenerations, out generations));
-                int i;
-                for (i = 0; i <= generations && !cancellationTokenSource.IsCancellationRequested; i++)
-                {
-                    bool societyDied = true;
-
                     Console.Clear();
-                    Console.WriteLine($"Generation: {i}");
-                    for (int x = 0; x < width; x++)
+                    Console.WriteLine($@"{Localization.GenerationLabel}: {currentGeneration}");
+                    if (gameOfLife.SocietyDied())
                     {
-                        for (int y = 0; y < height; y++)
-                        {
-                            if (board[x, y])
-                            {
-                                Console.Write("0");
-                                societyDied = false;
-                            }
-                            else
-                            {
-                                Console.Write(".");
-                            }
-                            if (y == board.GetLength(dimension: 1) - 1)
-                            {
-                                Console.WriteLine();
-                            }
-                        }
-                    }
-
-                    if(societyDied)
-                    {
-                        Console.WriteLine("I guess that's the end of our little society.");
+                        Console.Clear();
+                        Console.WriteLine(Localization.EndGameMessage);                        
                         break;
                     }
-
-                    bool[,] newBoard = new bool[width, height];
-                    for (int x = 0; x < width; x++)
-                    {
-                        for (int y = 0; y < height; y++)
-                        {
-                            int livingNeighbourCount = 0;
-                            for (int xScan = x - 1; xScan < x + 2; xScan++)
-                            {
-                                if (xScan < 0 || xScan >= width)
-                                {
-                                    continue;
-                                }
-                                for (int yScan = y - 1; yScan < y + 2; yScan++)
-                                {
-                                    if (xScan == x && yScan == y)
-                                    {
-                                        continue;
-                                    }
-
-                                    if (yScan >= 0 && yScan < width && board[xScan, yScan])
-                                    {
-                                        livingNeighbourCount += 1;
-                                    }
-                                }
-                            }
-                            newBoard[x, y] = (board[x, y] && livingNeighbourCount == 2) || livingNeighbourCount == 3;
-                        }
-                    }
-
-                    board = newBoard;
-                    Thread.Sleep(TimeSpan.FromSeconds(value: 1));
+                    gameOfLife.GameEngine.DrawGame(gameOfLife);
+                    gameOfLife = gameOfLife.GameEngine.Next(gameOfLife);
+                    Thread.Sleep(TimeSpan.FromSeconds(value: Utilities.ConfigValueOrDefault(Configuration, ApplicationSettingNames.DefaultGenerationLifeTime, 1)));
                 }
-                Console.WriteLine($"Generation: {i} - Output Completed! Press any key to exit.");
+                Console.WriteLine($@"{Localization.GenerationLabel}: {currentGeneration} - {Localization.AppExitMessage}");
+                gameOfLife.GameEngine.EndGame();
                 Console.ReadKey();
             }
             catch (OperationCanceledException)
             {
-                //DO NOTHING
+                Log.Information(Localization.UserCancelled);
             }
+            catch (Exception ex)
+            {
+                Log.Error(Localization.UnhandledException, ex);
+            }
+
             Console.CancelKeyPress -= OnCancelKeyPress;
         }
+
+
+        #region Private Methods
+
+        private static GameOfLife SetupGameBoard(out int generations)
+        {
+            int width = Utilities.GetUserInputInt(Localization.BoardWidthPrompt,
+                Utilities.ConfigValueOrDefault(Configuration, ApplicationSettingNames.DefaultBoardWidth, 100));
+            int height = Utilities.GetUserInputInt(Localization.BoardHeightPrompt,
+                Utilities.ConfigValueOrDefault(Configuration, ApplicationSettingNames.DefaultBoardHeight, 100));
+            generations = Utilities.GetUserInputInt(Localization.GameGenerationCountPrompt,
+                Utilities.ConfigValueOrDefault(Configuration, ApplicationSettingNames.DefaultGenerations, 10));
+
+            IGameEngine engine = getGameEngineFromConfig(Utilities.ConfigValueOrDefault(Configuration, ApplicationSettingNames.RenderEngine, "Console"));
+
+            return new GameOfLife(width, height, engine);
+        }
+
+        private static IGameEngine getGameEngineFromConfig(string configValueOrDefault)
+        {
+            if (configValueOrDefault.Equals("Unity", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return new UnityUI();
+            }
+            return new ConsoleUI();
+        }
+
+
+        private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs userArgs)
+        {
+            userArgs.Cancel = true;
+            CancellationTokenSource.Cancel();
+        }
+
+        private static void BuildConfiguration(string[] args)
+        {
+            Configuration = new ConfigurationBuilder()
+               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+               .AddEnvironmentVariables()
+               .AddCommandLine(args)
+               .Build();
+        }
+
+        private static void BuildLogger()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("life.log")
+                .CreateLogger();
+        }
+        #endregion
     }
 }
