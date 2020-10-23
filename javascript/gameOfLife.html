@@ -1,106 +1,32 @@
 <!DOCTYPE html>
 <html lang="en-ZA">
-<script>
-    async function runConway() {
-        let width = document.getElementById("width").value;
-        while (!width) {
-            width = document.getElementById("width").value;
-        }
-
-        let height = document.getElementById("height").value;
-        while (!height) {
-            height = document.getElementById("height").value;
-        }
-
-        let generations = document.getElementById("generations").value;
-        while (!generations) {
-            generations = document.getElementById("generations").value;
-        }
-        let board = []
-
-        let total = width * height;
-        let ratio = (total * 40) / 100;
-
-        for (let x = 0; x < width; x++) {
-            board.push([]);
-            for (let y = 0; y < height; y++) {
-                board[x].push(Math.floor((Math.random() * total) + 1) < ratio);
-            }
-        }
-
-        let outputElement = document.getElementById("output");
-        let canvas = document.getElementById("boardCanvas");
-        canvas.width = width * 4;
-        canvas.length = length * 4;
-        let canvasContext = canvas.getContext("2d");
-        for (let i = 0; i <= generations; i++) {
-            outputElement.textContent = "Generation: " + i;
-            let societyDied = true;
-            for (let x = 0; x < width; x++) {
-                for (let y = 0; y < height; y++) {
-                    if (board[x][y]) {
-                        canvasContext.fillStyle = "black";
-                        societyDied = false;
-                    } else {
-                        canvasContext.fillStyle = "gainsboro";
-                    }
-                    canvasContext.fillRect(x * 4, y * 4, 4, 4);
-                }
-            }
-            if (societyDied) {
-                outputElement.innerHTML = outputElement.textContent + "<br /> I guess that's the end of our little society";
-                break;
-            }
-
-            let newBoard = [];
-            for (let x = 0; x < width; x++) {
-                newBoard.push([]);
-                for (let y = 0; y < height; y++) {
-                    let livingNeighbourCount = 0;
-                    for (let xScan = x - 1; xScan < x + 2; xScan++) {
-                        if (xScan < 0 || xScan >= width) {
-                            continue;
-                        }
-                        for (let yScan = y - 1; yScan < y + 2; yScan++) {
-                            if (xScan === x && yScan === y) {
-                                continue;
-                            }
-
-                            if (yScan < 0 || yScan >= width) {
-                                continue;
-                            }
-
-                            if (board[xScan][yScan]) {
-                                livingNeighbourCount += 1;
-                            }
-                        }
-                    }
-                    newBoard[x].push((board[x][y] && livingNeighbourCount === 2) || livingNeighbourCount === 3);
-                }
-            }
-            board = newBoard;
-            await (new Promise(resolve => setTimeout(resolve, 1000)));
-        }
-    };
-</script>
-
-<head>
+  <head>
     <title>Conway's Game of Life</title>
-</head>
-
-<body>
-    <h1>Conway's Game of Life</H1>
-    <div>
-        <label for="width">Width: </label><br /><input id="width" name="width" type="number" /><br />
-        <label for="height">Height: </label><br /><input id="height" name="height" type="number" /><br />
-        <label for="generations">Generations: </label><br /><input id="generations" name="generations"
-            type="number" /><br />
-        <input type="button" value="Generate" onclick="runConway()" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="./style.css" rel="stylesheet" />
+    <script src="./conway.js"></script>
+  </head>
+  <body>
+    <div class="flex-box">
+      <div class="form">
+        <h2>Conway's Game of Life</h2>
+        <div class="form-control">
+          <label for="width">Width: </label>
+          <input id="width" name="width" type="number" />
+        </div>
+        <div class="form-control">
+          <label for="height">Height: </label>
+          <input id="height" name="height" type="number" />
+        </div>
+        <div class="form-control">
+          <label for="generations">Generations: </label>
+          <input id="generations" name="generations" type="number" />
+        </div>
+        <button type="button" onclick="runConway()">Generate</button>
+      </div>
+      <canvas id="boardCanvas"> </canvas>
+      <p id="output"></p>
     </div>
-    <canvas id="boardCanvas">
-
-    </canvas>
-    <p id="output"></p>
-</body>
-
+  </body>
 </html>

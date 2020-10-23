@@ -1,0 +1,49 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+* {
+    font-style: normal;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333333;
+}
+
+.flex-box {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-flow: column;
+}
+
+label {
+    display: block;
+    padding-top: 15px;
+}
+
+.form-control input {
+    padding: 10px;
+    height: 17px;
+    border: 2px solid rgb(0 0 0 / 33%);
+    border-radius: 3px;
+    width: 278px;
+}
+
+button {
+    color: #333333;
+    margin-top: 15px;
+    padding: 15px 10px;
+    display: block;
+    width: 300px;
+    border: 2px solid transparent;
+    background: rgb(158 158 158 / 32%);
+    margin-bottom: 15px;
+}
+
+button:hover{
+  background: transparent;
+  color: rgb(158 158 158 / 32%);
+  border: 2px solid rgb(158 158 158 / 32%);
+}
